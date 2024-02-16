@@ -3,7 +3,7 @@ import { Button, PhotosList, Screen, type ScreenProps } from "app/components"
 import { type AppStackParamList } from "app/navigators"
 import { colors, spacing } from "app/theme"
 import React, { useState } from "react"
-import { ActivityIndicator, View, type ViewStyle } from "react-native"
+import { ActivityIndicator, SafeAreaView, type ViewStyle } from "react-native"
 import { useGetAvailablePhotos } from "../hooks/useGetAvailablePhotos"
 import { xor } from "lodash"
 import { SuspenseLoader } from "../components/organisms/SuspenseLoader"
@@ -25,12 +25,11 @@ function AddPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamLi
   const handleAddPhotos = async () => {
     if (!isPending) {
       await mutateAsync(selectedPhotos)
-      console.log("pjh navigate")
       navigation.popToTop()
     }
   }
   return (
-    <View style={$innerContainer}>
+    <SafeAreaView style={$innerContainer}>
       <PhotosList
         isSelectable
         selectedPhotos={selectedPhotos}
@@ -50,7 +49,7 @@ function AddPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamLi
         tx="addPhotosScreen.addSelected"
         disabled={!selectedPhotos.length}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 

@@ -1,9 +1,17 @@
 import { Photo } from "../../types/photo"
-import { TouchableOpacity, Image, TouchableOpacityProps, ViewStyle, StyleSheet } from "react-native"
+import {
+  TouchableOpacity,
+  Image,
+  TouchableOpacityProps,
+  ViewStyle,
+  StyleSheet,
+  Dimensions,
+} from "react-native"
 import { AntDesign } from "@expo/vector-icons"
 import { colors, spacing } from "../../theme"
 import compose = StyleSheet.compose
 
+const screenSize = Dimensions.get("window").width
 export interface PhotoItemProps extends Omit<TouchableOpacityProps, "onPress"> {
   item: Photo
   isSelectable?: boolean
@@ -14,7 +22,7 @@ export interface PhotoItemProps extends Omit<TouchableOpacityProps, "onPress"> {
 export const PhotoItem = ({ item, isSelected, isSelectable, onPress, ...rest }: PhotoItemProps) => {
   return (
     <TouchableOpacity style={$container} onPress={() => onPress(item)} {...rest}>
-      <Image source={{ uri: item.photo as string }} style={$image} resizeMode="center" />
+      <Image source={item.photo} style={$image} resizeMode="cover" />
       {isSelectable && (
         <AntDesign
           name={isSelected ? "checkcircle" : "checkcircleo"}
@@ -38,4 +46,7 @@ const $baseCheck: ViewStyle = {
   right: spacing.xs,
 }
 
-const $image: ViewStyle = { aspectRatio: 1, width: "100%", height: 100 }
+const $image: ViewStyle = {
+  width: screenSize / 2 - spacing.xs * 2,
+  height: screenSize / 2 - spacing.xs * 2,
+}

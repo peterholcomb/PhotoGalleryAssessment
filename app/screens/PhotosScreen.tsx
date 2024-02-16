@@ -2,11 +2,10 @@ import { type NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Button, PhotosList, Screen, type ScreenProps } from "app/components"
 import { type AppStackParamList } from "app/navigators"
 import { spacing } from "app/theme"
-import { View, type ViewStyle } from "react-native"
-import React, { useEffect } from "react"
+import { SafeAreaView, type ViewStyle } from "react-native"
+import React from "react"
 import { SuspenseLoader } from "../components/organisms/SuspenseLoader"
 import { useGetSavedPhotos } from "../hooks/useGetSavedPhotos"
-import { useFocusEffect } from "@react-navigation/core"
 
 /**
  * An inner view for the PhotosScreen that contains the
@@ -22,7 +21,7 @@ function SavedPhotoListView({ navigation }: NativeStackScreenProps<AppStackParam
     navigation.navigate("EditPhotos")
   }
   return (
-    <View style={$innerContainer}>
+    <SafeAreaView style={$innerContainer}>
       <PhotosList
         style={$photosList}
         photos={photos}
@@ -31,7 +30,7 @@ function SavedPhotoListView({ navigation }: NativeStackScreenProps<AppStackParam
         }}
       />
       <Button style={$buttonPadding} tx="photosScreen.edit" onPress={navigateToEditPhotos} />
-    </View>
+    </SafeAreaView>
   )
 }
 

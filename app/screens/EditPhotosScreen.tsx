@@ -3,7 +3,7 @@ import { Button, ButtonProps, PhotosList, Screen, ScreenProps } from "app/compon
 import { AppStackParamList } from "app/navigators"
 import { colors, spacing } from "app/theme"
 import React, { useState } from "react"
-import { ActivityIndicator, View, ViewStyle } from "react-native"
+import { ActivityIndicator, SafeAreaView, View, ViewStyle } from "react-native"
 import { xor } from "lodash"
 import { useDeletePhotos } from "../hooks/useDeletePhotos"
 import { SuspenseLoader } from "../components/organisms/SuspenseLoader"
@@ -33,7 +33,7 @@ function EditPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamL
     }
   }
   return (
-    <View style={$innerContainer}>
+    <SafeAreaView style={$innerContainer}>
       <PhotosList
         isSelectable={isDeleting}
         selectedPhotos={selectedPhotos}
@@ -64,7 +64,7 @@ function EditPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamL
           onPress={isDeleting ? handleDeletePhotos : navigateToAddPhotos}
         />
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
