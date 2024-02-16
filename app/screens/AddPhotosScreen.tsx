@@ -1,13 +1,14 @@
 import { type NativeStackScreenProps } from "@react-navigation/native-stack"
-import { Button, PhotosList, Screen, type ScreenProps } from "app/components"
+import { Button, PhotosList, Screen } from "app/components"
 import { type AppStackParamList } from "app/navigators"
-import { colors, spacing } from "app/theme"
+import { colors } from "app/theme"
 import React, { useState } from "react"
-import { ActivityIndicator, SafeAreaView, type ViewStyle } from "react-native"
+import { ActivityIndicator, SafeAreaView } from "react-native"
 import { useGetAvailablePhotos } from "../hooks/useGetAvailablePhotos"
 import { xor } from "lodash"
 import { SuspenseLoader } from "../components/organisms/SuspenseLoader"
 import { useAddPhotos } from "../hooks/useAddPhotos"
+import * as $commonStyles from "./CommonStyles"
 
 /**
  * An inner view for the AddPhotosScreen that contains the
@@ -29,11 +30,11 @@ function AddPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamLi
     }
   }
   return (
-    <SafeAreaView style={$innerContainer}>
+    <SafeAreaView style={$commonStyles.$innerContainer}>
       <PhotosList
         isSelectable
         selectedPhotos={selectedPhotos}
-        style={$photosList}
+        style={$commonStyles.$photosList}
         photos={photos}
         onPhotoPress={(photo) => {
           setSelectedPhotos((selectedPhotos) => xor(selectedPhotos, [photo.id]))
@@ -45,7 +46,7 @@ function AddPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamLi
         LeftAccessory={(props) =>
           isPending && <ActivityIndicator color={colors.palette.accent100} {...props} />
         }
-        style={$buttonPadding}
+        style={$commonStyles.$buttonPadding}
         tx="addPhotosScreen.addSelected"
         disabled={!selectedPhotos.length}
       />
@@ -55,28 +56,10 @@ function AddPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamLi
 
 export function AddPhotosScreen(props: NativeStackScreenProps<AppStackParamList, "AddPhotos">) {
   return (
-    <Screen contentContainerStyle={$screen} safeAreaEdges={["top"]}>
+    <Screen contentContainerStyle={$commonStyles.$screen} safeAreaEdges={["top"]}>
       <SuspenseLoader>
         <AddPhotoListView {...props} />
       </SuspenseLoader>
     </Screen>
   )
-}
-
-const $screen: ScreenProps["contentContainerStyle"] = {
-  flex: 1,
-}
-
-const $innerContainer: ViewStyle = {
-  flex: 1,
-  paddingHorizontal: spacing.md,
-}
-
-const $photosList: ViewStyle = {
-  flex: 1,
-  marginBottom: spacing.sm,
-}
-
-const $buttonPadding: ViewStyle = {
-  marginBottom: spacing.xl,
 }

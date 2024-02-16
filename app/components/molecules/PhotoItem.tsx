@@ -6,6 +6,7 @@ import {
   ViewStyle,
   StyleSheet,
   Dimensions,
+  ImageStyle,
 } from "react-native"
 import { AntDesign } from "@expo/vector-icons"
 import { colors, spacing } from "../../theme"
@@ -46,7 +47,7 @@ const $baseCheck: ViewStyle = {
   right: spacing.xs,
 }
 
-const $image: ViewStyle = {
-  width: screenSize / 2 - spacing.xs * 2,
-  height: screenSize / 2 - spacing.xs * 2,
+const $image: ImageStyle = {
+  width: screenSize / 2 - spacing.sm * 2,
+  height: screenSize / 2 - spacing.sm * 2,
 }

@@ -1,13 +1,14 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { Button, ButtonProps, PhotosList, Screen, ScreenProps } from "app/components"
+import { Button, PhotosList, Screen } from "app/components"
 import { AppStackParamList } from "app/navigators"
-import { colors, spacing } from "app/theme"
+import { colors } from "app/theme"
 import React, { useState } from "react"
-import { ActivityIndicator, SafeAreaView, View, ViewStyle } from "react-native"
+import { ActivityIndicator, SafeAreaView, View } from "react-native"
 import { xor } from "lodash"
 import { useDeletePhotos } from "../hooks/useDeletePhotos"
 import { SuspenseLoader } from "../components/organisms/SuspenseLoader"
 import { useGetSavedPhotos } from "../hooks/useGetSavedPhotos"
+import * as $commonStyles from "./CommonStyles"
 
 /**
  * An inner view for the AddPhotosScreen that contains the
@@ -33,20 +34,20 @@ function EditPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamL
     }
   }
   return (
-    <SafeAreaView style={$innerContainer}>
+    <SafeAreaView style={$commonStyles.$innerContainer}>
       <PhotosList
         isSelectable={isDeleting}
         selectedPhotos={selectedPhotos}
-        style={$photosList}
+        style={$commonStyles.$photosList}
         photos={photos}
         onPhotoPress={(photo) => {
           setSelectedPhotos((selectedPhotos) => xor(selectedPhotos, [photo.id]))
         }}
       />
 
-      <View style={$buttons}>
+      <View style={$commonStyles.$buttons}>
         <Button
-          style={$button}
+          style={$commonStyles.$button}
           preset={isDeleting ? "reversed" : "default"}
           tx={isDeleting ? "editPhotosScreen.cancel" : "editPhotosScreen.select"}
           onPress={() => {
@@ -55,7 +56,7 @@ function EditPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamL
           }}
         />
         <Button
-          style={$button}
+          style={$commonStyles.$button}
           LeftAccessory={(props) =>
             isPending && <ActivityIndicator color={colors.palette.accent100} {...props} />
           }
@@ -70,34 +71,10 @@ function EditPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamL
 
 export function EditPhotosScreen(props: NativeStackScreenProps<AppStackParamList, "Photos">) {
   return (
-    <Screen contentContainerStyle={$screen} safeAreaEdges={["top"]}>
+    <Screen contentContainerStyle={$commonStyles.$screen} safeAreaEdges={["top"]}>
       <SuspenseLoader>
         <EditPhotoListView {...props} />
       </SuspenseLoader>
     </Screen>
   )
-}
-
-const $screen: ScreenProps["contentContainerStyle"] = {
-  flex: 1,
-}
-
-const $innerContainer: ViewStyle = {
-  flex: 1,
-  paddingHorizontal: spacing.md,
-}
-
-const $photosList: ViewStyle = {
-  flex: 1,
-  marginBottom: spacing.sm,
-}
-
-const $buttons: ViewStyle = {
-  flexDirection: "row",
-  gap: spacing.md,
-  marginBottom: spacing.xl,
-}
-
-const $button: ButtonProps["style"] = {
-  flex: 1,
 }

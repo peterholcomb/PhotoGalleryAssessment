@@ -3,7 +3,16 @@ import React from "react"
 import { Button, ButtonProps, Text } from "../atoms"
 import { spacing } from "../../theme"
 
-export const ErrorView = ({ resetErrorBoundary }) => {
+export interface ErrorViewProps {
+  resetErrorBoundary: () => void
+}
+
+/**
+ * A view to display when an error occurs in the app that allows the user to retry the action
+ * @param resetErrorBoundary
+ * @constructor
+ */
+export const ErrorView = ({ resetErrorBoundary }: ErrorViewProps) => {
   return (
     <View style={$container}>
       <View style={$innerContainer}>
