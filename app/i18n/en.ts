@@ -16,6 +16,7 @@ const en = {
   },
   errorView: {
     title: "Something went wrong",
+    body: "You're request was bad and you should feel bad.",
     retry: "Retry",
   },
 }

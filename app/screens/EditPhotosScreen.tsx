@@ -1,42 +1,79 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Button, ButtonProps, PhotosList, Screen, ScreenProps } from "app/components"
 import { AppStackParamList } from "app/navigators"
-import { spacing } from "app/theme"
-import { useState } from "react"
-import { View, ViewStyle } from "react-native"
+import { colors, spacing } from "app/theme"
+import React, { useState } from "react"
+import { ActivityIndicator, View, ViewStyle } from "react-native"
+import { xor } from "lodash"
+import { useDeletePhotos } from "../hooks/useDeletePhotos"
+import { SuspenseLoader } from "../components/organisms/SuspenseLoader"
 import { useGetSavedPhotos } from "../hooks/useGetSavedPhotos"
 
-export function EditPhotosScreen({
-  navigation,
-  route,
-}: NativeStackScreenProps<AppStackParamList, "Photos">) {
+/**
+ * An inner view for the AddPhotosScreen that contains the
+ * list of available photos and a button to add the selected
+ * photos to the user's profile.
+ *
+ * Utilizes the suspense API to show a loading view while the photos are loaded
+ * @constructor
+ */
+function EditPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamList, "Photos">) {
   const [isDeleting, setIsDeleting] = useState(false)
+  const [selectedPhotos, setSelectedPhotos] = useState<string[]>([])
   const { data: photos } = useGetSavedPhotos()
+  const { isPending, mutateAsync } = useDeletePhotos()
 
   const navigateToAddPhotos = () => {
     navigation.navigate("AddPhotos")
   }
+  const handleDeletePhotos = async () => {
+    if (!isPending) {
+      await mutateAsync(selectedPhotos)
+      navigation.popToTop()
+    }
+  }
+  return (
+    <View style={$innerContainer}>
+      <PhotosList
+        isSelectable={isDeleting}
+        selectedPhotos={selectedPhotos}
+        style={$photosList}
+        photos={photos}
+        onPhotoPress={(photo) => {
+          setSelectedPhotos((selectedPhotos) => xor(selectedPhotos, [photo.id]))
+        }}
+      />
 
+      <View style={$buttons}>
+        <Button
+          style={$button}
+          preset={isDeleting ? "reversed" : "default"}
+          tx={isDeleting ? "editPhotosScreen.cancel" : "editPhotosScreen.select"}
+          onPress={() => {
+            setSelectedPhotos([])
+            setIsDeleting(!isDeleting)
+          }}
+        />
+        <Button
+          style={$button}
+          LeftAccessory={(props) =>
+            isPending && <ActivityIndicator color={colors.palette.accent100} {...props} />
+          }
+          preset={isDeleting ? "danger" : "default"}
+          tx={isDeleting ? "editPhotosScreen.delete" : "editPhotosScreen.add"}
+          onPress={isDeleting ? handleDeletePhotos : navigateToAddPhotos}
+        />
+      </View>
+    </View>
+  )
+}
+
+export function EditPhotosScreen(props: NativeStackScreenProps<AppStackParamList, "Photos">) {
   return (
     <Screen contentContainerStyle={$screen} safeAreaEdges={["top"]}>
-      <View style={$innerContainer}>
-        <PhotosList style={$photosList} photos={photos} />
-
-        <View style={$buttons}>
-          <Button
-            style={$button}
-            preset={isDeleting ? "reversed" : "default"}
-            tx={isDeleting ? "editPhotosScreen.cancel" : "editPhotosScreen.select"}
-            onPress={() => setIsDeleting(!isDeleting)}
-          />
-          <Button
-            style={$button}
-            preset={isDeleting ? "danger" : "default"}
-            tx={isDeleting ? "editPhotosScreen.delete" : "editPhotosScreen.add"}
-            onPress={isDeleting ? undefined : navigateToAddPhotos}
-          />
-        </View>
-      </View>
+      <SuspenseLoader>
+        <EditPhotoListView {...props} />
+      </SuspenseLoader>
     </Screen>
   )
 }

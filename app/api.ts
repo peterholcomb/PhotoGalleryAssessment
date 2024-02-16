@@ -1,5 +1,9 @@
 import photos from "assets/photos"
 import { Photo } from "./types/photo"
+import { uniq, without } from "lodash"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
+const PHOTOS_KEY = "photos"
 
 /**
  * ! NOTE: We aren't prescribing any particular solution for persistence
@@ -15,32 +19,49 @@ import { Photo } from "./types/photo"
  * This function should simply return all available photos
  * @returns All of the photos available for the user to add
  */
-function getAvailablePhotos(): Photo[] {
-  return photos
+async function getAvailablePhotos(): Promise<Photo[]> {
+  const currentPhotos = await getSavedPhotos()
+  return photos.filter((photo) => !currentPhotos.find((p) => p.id === photo.id))
 }
 
 /**
  * This function should retrieve the user's currently saved photos
  */
-function getSavedPhotos() {
-  // TODO: You should add some logic here
-  return []
+async function getSavedPhotos(): Promise<Photo[]> {
+  const storageEntry = JSON.parse((await AsyncStorage.getItem(PHOTOS_KEY)) ?? "[]")
+  return storageEntry.map((id) => photos.find((photo) => photo.id === id))
 }
 
 /**
  * This function should add the specified photos to the user's saved photos
  * @param ids - An array of ids matching the photos that should be added
  */
-function addPhotos(ids: string[]) {
-  // TODO: You should add some logic here
+async function addPhotos(ids: string[]): Promise<void> {
+  const currentPhotos = await getSavedPhotos()
+  await AsyncStorage.setItem(
+    PHOTOS_KEY,
+    JSON.stringify(uniq([...currentPhotos.map((photo) => photo.id), ...ids])),
+  )
 }
 
 /**
  * This function should remove the specified photos from the user's saved photos
  * @param ids - An array of ids matching the photos that should be removed
  */
-function removePhotos(ids: string[]) {
-  // TODO: You should add some logic here
+async function removePhotos(ids: string[]): Promise<void> {
+  const currentPhotos = await getSavedPhotos()
+
+  await AsyncStorage.setItem(
+    PHOTOS_KEY,
+    JSON.stringify(
+      uniq(
+        without(
+          currentPhotos.map((photo) => photo.id),
+          ...ids,
+        ),
+      ),
+    ),
+  )
 }
 
 export default {

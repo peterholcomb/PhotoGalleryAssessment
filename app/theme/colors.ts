@@ -34,6 +34,13 @@ const palette = {
   angry500: "#C03403",
   angry600: "#871717",
 
+  success100: "#D4ECD6",
+  success200: "#B2D6B4",
+  success300: "#95C49B",
+  success400: "#0A8C4A",
+  success500: "#0A6640",
+  success600: "#0A4A2C",
+
   overlay20: "rgba(25, 16, 21, 0.2)",
   overlay50: "rgba(25, 16, 21, 0.5)",
 } as const

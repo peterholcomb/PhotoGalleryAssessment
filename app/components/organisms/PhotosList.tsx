@@ -10,6 +10,7 @@ import { PhotoItem } from "../molecules/PhotoItem"
  * being displayed.
  */
 export type PhotoListProps = ViewProps & {
+  isSelectable?: boolean
   photos: Photo[]
   numColumns?: number
   onPhotoPress?: (photo: Photo) => void
@@ -18,6 +19,7 @@ export type PhotoListProps = ViewProps & {
 
 export function PhotosList({
   photos,
+  isSelectable,
   onPhotoPress,
   numColumns = 2,
   selectedPhotos,
@@ -30,6 +32,7 @@ export function PhotosList({
       renderItem={(props) => (
         <PhotoItem
           onPress={onPhotoPress}
+          isSelectable={isSelectable}
           isSelected={selectedPhotos?.indexOf(props.item.id) >= 0}
           {...props}
         />

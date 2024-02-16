@@ -1,15 +1,13 @@
 import { type NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Button, PhotosList, Screen, type ScreenProps } from "app/components"
 import { type AppStackParamList } from "app/navigators"
-import { spacing } from "app/theme"
-import { Suspense, useState } from "react"
-import { View, type ViewStyle } from "react-native"
+import { colors, spacing } from "app/theme"
+import React, { useState } from "react"
+import { ActivityIndicator, View, type ViewStyle } from "react-native"
 import { useGetAvailablePhotos } from "../hooks/useGetAvailablePhotos"
 import { xor } from "lodash"
-import { LoadingView } from "../components/molecules/LoadingView"
-import { ErrorBoundary } from "react-error-boundary"
-import { QueryErrorResetBoundary } from "@tanstack/react-query"
-import { ErrorView } from "../components/molecules/ErrorView"
+import { SuspenseLoader } from "../components/organisms/SuspenseLoader"
+import { useAddPhotos } from "../hooks/useAddPhotos"
 
 /**
  * An inner view for the AddPhotosScreen that contains the
@@ -19,12 +17,22 @@ import { ErrorView } from "../components/molecules/ErrorView"
  * Utilizes the suspense API to show a loading view while the photos are loaded
  * @constructor
  */
-function AddPhotoListView() {
+function AddPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamList, "AddPhotos">) {
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([])
   const { data: photos } = useGetAvailablePhotos()
+  const { isPending, mutateAsync } = useAddPhotos()
+
+  const handleAddPhotos = async () => {
+    if (!isPending) {
+      await mutateAsync(selectedPhotos)
+      console.log("pjh navigate")
+      navigation.popToTop()
+    }
+  }
   return (
     <View style={$innerContainer}>
       <PhotosList
+        isSelectable
         selectedPhotos={selectedPhotos}
         style={$photosList}
         photos={photos}
@@ -34,6 +42,10 @@ function AddPhotoListView() {
       />
 
       <Button
+        onPress={handleAddPhotos}
+        LeftAccessory={(props) =>
+          isPending && <ActivityIndicator color={colors.palette.accent100} {...props} />
+        }
         style={$buttonPadding}
         tx="addPhotosScreen.addSelected"
         disabled={!selectedPhotos.length}
@@ -42,21 +54,12 @@ function AddPhotoListView() {
   )
 }
 
-export function AddPhotosScreen({
-  navigation,
-  route,
-}: NativeStackScreenProps<AppStackParamList, "AddPhotos">) {
+export function AddPhotosScreen(props: NativeStackScreenProps<AppStackParamList, "AddPhotos">) {
   return (
     <Screen contentContainerStyle={$screen} safeAreaEdges={["top"]}>
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <ErrorBoundary onReset={reset} fallbackRender={(props) => <ErrorView {...props} />}>
-            <Suspense fallback={<LoadingView />}>
-              <AddPhotoListView />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </QueryErrorResetBoundary>
+      <SuspenseLoader>
+        <AddPhotoListView {...props} />
+      </SuspenseLoader>
     </Screen>
   )
 }
