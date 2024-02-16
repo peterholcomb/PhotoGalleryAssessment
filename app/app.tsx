@@ -10,6 +10,8 @@
  * The app navigation resides in ./app/navigators, so head over there
  * if you're interested in adding screens and navigators.
  */
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
 if (__DEV__) {
   // Load Reactotron configuration in development. We don't want to
   // include this in our production bundle, so we are using `if (__DEV__)`
@@ -53,6 +55,7 @@ interface AppProps {
   hideSplashScreen: () => Promise<void>
 }
 
+const queryClient = new QueryClient()
 /**
  * This is the root component of our app.
  */
@@ -83,13 +86,15 @@ function App(props: AppProps) {
 
   // otherwise, we're ready to render the app
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <AppNavigator
-        linking={linking}
-        initialState={initialNavigationState}
-        onStateChange={onNavigationStateChange}
-      />
-    </SafeAreaProvider>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <AppNavigator
+          linking={linking}
+          initialState={initialNavigationState}
+          onStateChange={onNavigationStateChange}
+        />
+      </SafeAreaProvider>
+    </QueryClientProvider>
   )
 }
 

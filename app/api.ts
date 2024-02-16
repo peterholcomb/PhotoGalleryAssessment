@@ -1,4 +1,5 @@
 import photos from "assets/photos"
+import { Photo } from "./types/photo"
 
 /**
  * ! NOTE: We aren't prescribing any particular solution for persistence
@@ -14,7 +15,7 @@ import photos from "assets/photos"
  * This function should simply return all available photos
  * @returns All of the photos available for the user to add
  */
-function getAvailablePhotos() {
+function getAvailablePhotos(): Photo[] {
   return photos
 }
 
@@ -23,6 +24,7 @@ function getAvailablePhotos() {
  */
 function getSavedPhotos() {
   // TODO: You should add some logic here
+  return []
 }
 
 /**

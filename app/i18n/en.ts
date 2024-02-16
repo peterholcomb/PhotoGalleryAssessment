@@ -14,6 +14,10 @@ const en = {
     title: "Add Photos",
     addSelected: "Add Selected",
   },
+  errorView: {
+    title: "Something went wrong",
+    retry: "Retry",
+  },
 }
 
 export default en

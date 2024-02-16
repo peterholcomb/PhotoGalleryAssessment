@@ -16,7 +16,6 @@ export function PhotosScreen({
     <Screen contentContainerStyle={$screen} safeAreaEdges={["top"]}>
       <View style={$innerContainer}>
         <PhotosList style={$photosList} />
-
         <Button style={$buttonPadding} tx="photosScreen.edit" onPress={navigateToEditPhotos} />
       </View>
     </Screen>
@@ -34,6 +33,7 @@ const $innerContainer: ViewStyle = {
 
 const $photosList: ViewStyle = {
   flex: 1,
+  marginBottom: spacing.sm,
 }
 
 const $buttonPadding: ViewStyle = {

@@ -4,12 +4,14 @@ import { AppStackParamList } from "app/navigators"
 import { spacing } from "app/theme"
 import { useState } from "react"
 import { View, ViewStyle } from "react-native"
+import { useGetSavedPhotos } from "../hooks/useGetSavedPhotos"
 
 export function EditPhotosScreen({
   navigation,
   route,
 }: NativeStackScreenProps<AppStackParamList, "Photos">) {
   const [isDeleting, setIsDeleting] = useState(false)
+  const { data: photos } = useGetSavedPhotos()
 
   const navigateToAddPhotos = () => {
     navigation.navigate("AddPhotos")
@@ -18,7 +20,7 @@ export function EditPhotosScreen({
   return (
     <Screen contentContainerStyle={$screen} safeAreaEdges={["top"]}>
       <View style={$innerContainer}>
-        <PhotosList style={$photosList} />
+        <PhotosList style={$photosList} photos={photos} />
 
         <View style={$buttons}>
           <Button
@@ -50,6 +52,7 @@ const $innerContainer: ViewStyle = {
 
 const $photosList: ViewStyle = {
   flex: 1,
+  marginBottom: spacing.sm,
 }
 
 const $buttons: ViewStyle = {
