@@ -1,5 +1,5 @@
 import { type NativeStackScreenProps } from "@react-navigation/native-stack"
-import { Button, Screen } from "app/components"
+import { PhotoItem, Screen } from "app/components"
 import { type AppStackParamList } from "app/navigators"
 import { SafeAreaView } from "react-native"
 import React from "react"
@@ -15,23 +15,17 @@ import * as $commonStyles from "./CommonStyles"
  * Utilizes the suspense API to show a loading view while the photos are loaded
  * @constructor
  */
-function SinglePhotoView({ navigation }: NativeStackScreenProps<AppStackParamList, "Photos">) {
+function SinglePhotoView({ route }: NativeStackScreenProps<AppStackParamList, "Photos">) {
   const { data: photos } = useGetSavedPhotos()
-  const navigateToEditPhotos = () => {
-    navigation.navigate("EditPhotos")
-  }
+  const photo = photos?.find((photo) => photo.id === route?.params?.photoId)
   return (
     <SafeAreaView style={$commonStyles.$innerContainer}>
-      <Button
-        style={$commonStyles.$buttonPadding}
-        tx="photosScreen.edit"
-        onPress={navigateToEditPhotos}
-      />
+      <PhotoItem item={photo} />
     </SafeAreaView>
   )
 }
 
-export function PhotosScreen(props: NativeStackScreenProps<AppStackParamList, "Photos">) {
+export function PhotoScreen(props: NativeStackScreenProps<AppStackParamList, "Photos">) {
   return (
     <Screen contentContainerStyle={$commonStyles.$screen} safeAreaEdges={["top"]}>
       <SuspenseLoader>

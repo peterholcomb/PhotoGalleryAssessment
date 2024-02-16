@@ -13,8 +13,6 @@ import * as Screens from "app/screens"
 import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { colors } from "app/theme"
-import { translations } from "i18n-js"
-import en from "app/i18n/en"
 import { translate } from "app/i18n"
 
 /**
@@ -34,6 +32,7 @@ export type AppStackParamList = {
   Photos: undefined
   EditPhotos: undefined
   AddPhotos: undefined
+  Photo: { photoId: string }
 }
 
 /**
@@ -62,6 +61,13 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen
         name="Photos"
         component={Screens.PhotosScreen}
+        options={{
+          headerTitle: translate("photosScreen.title"),
+        }}
+      />
+      <Stack.Screen
+        name="Photo"
+        component={Screens.PhotoScreen}
         options={{
           headerTitle: translate("photosScreen.title"),
         }}

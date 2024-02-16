@@ -40,9 +40,13 @@ function EditPhotoListView({ navigation }: NativeStackScreenProps<AppStackParamL
         selectedPhotos={selectedPhotos}
         style={$commonStyles.$photosList}
         photos={photos}
-        onPhotoPress={(photo) => {
-          setSelectedPhotos((selectedPhotos) => xor(selectedPhotos, [photo.id]))
-        }}
+        onPhotoPress={
+          isDeleting
+            ? (photo) => {
+                setSelectedPhotos((selectedPhotos) => xor(selectedPhotos, [photo.id]))
+              }
+            : undefined
+        }
       />
 
       <View style={$commonStyles.$buttons}>

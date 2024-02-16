@@ -26,7 +26,7 @@ function SavedPhotoListView({ navigation }: NativeStackScreenProps<AppStackParam
         style={$commonStyles.$photosList}
         photos={photos}
         onPhotoPress={(photo) => {
-          console.log("pjh photo", photo)
+          navigation.navigate("Photo", { photoId: photo.id })
         }}
       />
       <Button
