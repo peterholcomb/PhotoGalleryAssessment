@@ -1,2 +1,5 @@
 export * from "./Header"
 export * from "./Screen"
+export * from "./ErrorView"
+export * from "./PhotoItem"
+export * from "./LoadingView"

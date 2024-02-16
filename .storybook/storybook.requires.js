@@ -48,8 +48,11 @@ try {
 const getStories = () => {
   return {
     "./.storybook/stories/Button.stories.tsx": require("./stories/Button.stories.tsx"),
+    "./.storybook/stories/ErrorView.stories.tsx": require("./stories/ErrorView.stories.tsx"),
     "./.storybook/stories/Header.stories.tsx": require("./stories/Header.stories.tsx"),
     "./.storybook/stories/Icon.stories.tsx": require("./stories/Icon.stories.tsx"),
+    "./.storybook/stories/LoadingView.stories.tsx": require("./stories/LoadingView.stories.tsx"),
+    "./.storybook/stories/PhotoItem.stories.tsx": require("./stories/PhotoItem.stories.tsx"),
     "./.storybook/stories/Text.stories.tsx": require("./stories/Text.stories.tsx"),
   };
 };
