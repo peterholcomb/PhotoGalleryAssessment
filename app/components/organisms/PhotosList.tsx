@@ -1,4 +1,4 @@
-import { FlatList, ViewProps, ViewStyle } from "react-native"
+import { FlatList, FlatListProps, ViewStyle } from "react-native"
 import { Photo } from "../../types/photo"
 import { PhotoItem } from "../molecules/PhotoItem"
 
@@ -9,7 +9,7 @@ import { PhotoItem } from "../molecules/PhotoItem"
  * the ability to select photos from those which are currently
  * being displayed.
  */
-export type PhotoListProps = ViewProps & {
+export type PhotoListProps = FlatListProps<Photo> & {
   isSelectable?: boolean
   photos: Photo[]
   numColumns?: number
