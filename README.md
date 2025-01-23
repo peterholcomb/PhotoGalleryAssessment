@@ -1,4 +1,4 @@
-# Skylight Front End Challenge
+# React Native Front End Challenge
 
 ## Introduction
 
@@ -21,8 +21,7 @@ Users should be able to select, add, and delete multiple photos at once. Some ad
 
 ## Prescribed Implementation Details
 
-- You must use Typescript
-- No class components, please. We don't hate them, but in practice you're unlikely to be using them at Skylight unless you're working on legacy code.
+- You must use Typescript.
 - You must use `@tanstack/react-query` to interact with your client API. Documentation can be found [here](https://tanstack.com/query/latest/docs/react/installation).
 - Your solution should run on iOS, Android, and Web. Be careful with any RN packages you decide to import and consider this when implementing your persistence.
 
